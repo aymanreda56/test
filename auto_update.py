@@ -4,6 +4,7 @@ import datetime
 import dateutil.parser
 import wget
 import subprocess
+import shutil
 
 r = requests.get("https://api.github.com/repos/aymanreda56/test/commits")
 
@@ -22,6 +23,8 @@ if(current_version < latest_version):
     # url = 'http://github.com/aymanreda56/test/archive/main.zip'
     # filename = wget.download(url)
     subprocess.run('git clone https://github.com/aymanreda56/test')
+    shutil.copytree('test', './')
+    shutil.rmtree('test')
 
 
 

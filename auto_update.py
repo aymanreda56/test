@@ -3,6 +3,7 @@ import json
 import datetime
 import dateutil.parser
 import wget
+import subprocess
 
 r = requests.get("https://api.github.com/repos/aymanreda56/test/commits")
 
@@ -10,7 +11,7 @@ entry_date = r.json()[0]['commit']['author']['date']
 
 
 
-with open(file="ver.txt", mode='rw')as f:
+with open(file="ver.txt", mode='r')as f:
     current_version_str = f.read()
 
 current_version = dateutil.parser.parse(current_version_str)
@@ -18,8 +19,9 @@ current_version = dateutil.parser.parse(current_version_str)
 
 latest_version = dateutil.parser.parse(entry_date)
 if(current_version < latest_version):
-    url = 'http://github.com/aymanreda56/test/archive/main.zip'
-    filename = wget.download(url)
+    # url = 'http://github.com/aymanreda56/test/archive/main.zip'
+    # filename = wget.download(url)
+    subprocess.run('git clone https://github.com/aymanreda56/test')
 
 
 

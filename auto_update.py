@@ -21,7 +21,7 @@ latest_version = dateutil.parser.parse(entry_date)
 if(current_version < latest_version):
     # url = 'http://github.com/aymanreda56/test/archive/main.zip'
     # filename = wget.download(url)
-    subprocess.run('git pull')
+    subprocess.run('git pull origin/main')
 
 
 
@@ -30,5 +30,5 @@ with open(file="ver.txt", mode='w')as f:
     f.write(entry_date)
 print(type(dateutil.parser.parse(entry_date)))
 
+#tryy
 
-#cmmmt

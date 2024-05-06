@@ -26,11 +26,9 @@ if(current_version < latest_version):
 
 
 
-
-
-
-
 with open(file="ver.txt", mode='w')as f:
     f.write(entry_date)
 print(type(dateutil.parser.parse(entry_date)))
 
+
+#commnt

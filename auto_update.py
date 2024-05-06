@@ -15,10 +15,11 @@ with open(file="ver.txt", mode='r')as f:
     current_version_str = f.read()
 
 current_version = dateutil.parser.parse(current_version_str)
+print('logical no')
 
 
 latest_version = dateutil.parser.parse(entry_date)
-if(current_version < latest_version):
+if(current_version <= latest_version):
     # url = 'http://github.com/aymanreda56/test/archive/main.zip'
     # filename = wget.download(url)
     subprocess.run('git pull')
@@ -28,7 +29,5 @@ if(current_version < latest_version):
         f.write(entry_date)
 print(type(dateutil.parser.parse(entry_date)))
 
-
-#try
 
 

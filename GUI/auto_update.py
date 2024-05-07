@@ -103,7 +103,7 @@ def download_update(username, reponame, versionfile, url):
         print(f'downloading from {url}')
         
         try:
-            filename = wget.download(url)
+            filename = wget.download(url, out=os.path.dirname(os.path.abspath(__file__)))
         except Exception as e:
             print(e)
             return
@@ -119,7 +119,7 @@ def download_update(username, reponame, versionfile, url):
             temp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'temp')
             if(not os.path.exists(temp_dir)):
                 os.mkdir(temp_dir)
-            zObject.extractall()
+            zObject.extractall(path=os.path.dirname(os.path.abspath(__file__)))
 
             
 

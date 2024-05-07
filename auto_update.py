@@ -24,6 +24,11 @@ import subprocess
 from zipfile import ZipFile
 
 
+username = 'aymanreda56'
+reponame= 'test'
+versionfile='ver.txt'
+url = f'http://github.com/{username}/{reponame}/archive/main.zip'
+
 
 
 
@@ -50,59 +55,75 @@ def move_files_inside_folder_to_outside(folder_path):
 
 
 
+def check_For_Updates(username, reponame, versionfile):
+
+    r = requests.get(f"https://api.github.com/repos/{username}/{reponame}/commits")
+
+    entry_date = r.json()[0]['commit']['author']['date']
+
+    
+
+    with open(file=f"{versionfile}", mode='r')as f:
+        current_version_str = f.read()
+        
+    
 
 
+    latest_version = dateutil.parser.parse(entry_date)
+
+    if(not current_version):
+        print('no version file, downloading the new version...')
+        return True, latest_version
+    current_version = dateutil.parser.parse(current_version_str)
 
 
-
-r = requests.get("https://api.github.com/repos/aymanreda56/test/commits")
-
-entry_date = r.json()[0]['commit']['author']['date']
-
-
-
-with open(file="ver.txt", mode='r')as f:
-    current_version_str = f.read()
-
-current_version = dateutil.parser.parse(current_version_str)
+    if(current_version <= latest_version):
+        print('New Version Available!')
+        return True, latest_version
+    else:
+        print('Up To Date')
+        return False, latest_version
 
 
-latest_version = dateutil.parser.parse(entry_date)
-if(current_version <= latest_version):
-    url = 'http://github.com/aymanreda56/test/archive/main.zip'
-    filename = wget.download(url)
-    print(filename)
-    new_version_zipfile_path = os.path.join(os.getcwd(), filename)
+def download_update(username, reponame, versionfile, url):
+    is_update_available, new_version = check_For_Updates(username=username, reponame=reponame, versionfile=versionfile)
 
-    # subprocess.run('git pull')
+    if(is_update_available):
+        filename = wget.download(url)
+        print(filename)
+        new_version_zipfile_path = os.path.join(os.getcwd(), filename)
 
-    with ZipFile(filename, 'r') as zObject: 
-  
-        # Extracting all the members of the zip  
-        # into a specific location. 
-        temp_dir = os.path.join(os.getcwd(), 'temp')
-        if(not os.path.exists(temp_dir)):
-            os.mkdir(temp_dir)
-        zObject.extractall()
+        # subprocess.run('git pull')
+
 
         new_version_folder, extension = os.path.splitext(new_version_zipfile_path)
+        with ZipFile(filename, 'r') as zObject: 
+            temp_dir = os.path.join(os.getcwd(), 'temp')
+            if(not os.path.exists(temp_dir)):
+                os.mkdir(temp_dir)
+            zObject.extractall()
+
+            
 
         move_files_inside_folder_to_outside(new_version_folder)
-    
+        
 
-    try:
-        os.remove(new_version_zipfile_path)
-        os.remove(temp_dir)
-    except Exception as e:
-        print(e)
-    
-
-
-
-    with open(file="ver.txt", mode='w')as f:
-        f.write(entry_date)
+        try:
+            os.remove(temp_dir)
+            os.remove(new_version_zipfile_path)
+        except Exception as e:
+            print(e)
+        
 
 
-else:
-    print('Up to date :)')
 
+        with open(file="ver.txt", mode='w')as f:
+            f.write(new_version)
+
+
+    else:
+        print('Up to date :)')
+
+
+
+download_update(username=username, reponame=reponame, versionfile=versionfile, url=url)

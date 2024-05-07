@@ -39,7 +39,7 @@ def move_files_inside_folder_to_outside(folder_path):
         destination = os.path.join(os.path.dirname(folder_path), file_name)
         
         # Move the file
-        shutil.move(source, destination)
+        shutil.copy(source, destination)
 
 
 
@@ -88,4 +88,5 @@ if(current_version <= latest_version):
         f.write(entry_date)
 
 
+#saa
 

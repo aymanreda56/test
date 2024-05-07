@@ -68,6 +68,8 @@ def check_For_Updates(username, reponame, versionfile):
         print(e)
         return False, None, ''
     
+
+    versionfile = os.path.join( os.path.dirname(os.path.abspath(__file__)) , versionfile)
     if(os.path.exists(versionfile)):
         with open(file=f"{versionfile}", mode='r')as f:
             current_version_str = f.read()
@@ -97,7 +99,10 @@ def check_For_Updates(username, reponame, versionfile):
 
 
 def download_update(username, reponame, versionfile, url):
+
     is_update_available, new_version, new_version_str = check_For_Updates(username=username, reponame=reponame, versionfile=versionfile)
+
+    versionfile = os.path.join( os.path.dirname(os.path.abspath(__file__)) , versionfile)
 
     if(is_update_available):
         print(f'downloading from {url}')

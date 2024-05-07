@@ -78,9 +78,11 @@ if(current_version <= latest_version):
         temp_dir = os.path.join(os.getcwd(), 'temp')
         if(not os.path.exists(temp_dir)):
             os.mkdir(temp_dir)
-        zObject.extractall(path=temp_dir)
+        zObject.extractall()
 
-        move_files_inside_folder_to_outside(temp_dir)
+        new_version_folder, extension = os.path.splitext(new_version_zipfile_path)
+
+        move_files_inside_folder_to_outside(new_version_folder)
 
 
 

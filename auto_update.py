@@ -41,7 +41,10 @@ def move_files_inside_folder_to_outside(folder_path):
         # Move the file
         shutil.move(source, destination)
     
-    os.remove(folder_path)
+    try:
+        os.remove(folder_path)
+    except Exception as e:
+        print(e)
 
 
 
@@ -86,8 +89,13 @@ if(current_version <= latest_version):
 
         move_files_inside_folder_to_outside(new_version_folder)
     
-    os.remove(new_version_zipfile_path)
-    os.remove(temp_dir)
+
+    try:
+        os.remove(new_version_zipfile_path)
+        os.remove(temp_dir)
+    except Exception as e:
+        print(e)
+    
 
 
 
@@ -95,5 +103,6 @@ if(current_version <= latest_version):
         f.write(entry_date)
 
 
-#saa
+else:
+    print('Up to date :)')
 

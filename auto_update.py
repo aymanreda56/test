@@ -60,18 +60,21 @@ def check_For_Updates(username, reponame, versionfile):
     r = requests.get(f"https://api.github.com/repos/{username}/{reponame}/commits")
 
     entry_date = r.json()[0]['commit']['author']['date']
+    latest_version = dateutil.parser.parse(entry_date)
 
     
-
-    with open(file=f"{versionfile}", mode='r')as f:
-        current_version_str = f.read()
+    if(os.path.exists(versionfile)):
+        with open(file=f"{versionfile}", mode='r')as f:
+            current_version_str = f.read()
+    else:
+        print('no version file, downloading the new version...')
+        return True, latest_version, entry_date
         
     
 
     
-    latest_version = dateutil.parser.parse(entry_date)
 
-    if(not current_version_str):
+    if(current_version_str == ''):
         print('no version file, downloading the new version...')
         return True, latest_version, entry_date
     
@@ -111,7 +114,7 @@ def download_update(username, reponame, versionfile, url):
 
         try:
             shutil.rmtree(temp_dir)
-            shutil.rmtree(new_version_zipfile_path)
+            os.remove(new_version_zipfile_path)
         except Exception as e:
             print(e)
         

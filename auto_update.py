@@ -47,7 +47,7 @@ def move_files_inside_folder_to_outside(folder_path):
         shutil.move(source, destination)
     
     try:
-        os.remove(folder_path)
+        shutil.rmtree(folder_path)
     except Exception as e:
         print(e)
 
@@ -71,9 +71,10 @@ def check_For_Updates(username, reponame, versionfile):
 
     latest_version = dateutil.parser.parse(entry_date)
 
-    if(not current_version):
+    if(not current_version_str):
         print('no version file, downloading the new version...')
         return True, latest_version
+    
     current_version = dateutil.parser.parse(current_version_str)
 
 
@@ -109,8 +110,8 @@ def download_update(username, reponame, versionfile, url):
         
 
         try:
-            os.remove(temp_dir)
-            os.remove(new_version_zipfile_path)
+            shutil.rmtree(temp_dir)
+            shutil.rmtree(new_version_zipfile_path)
         except Exception as e:
             print(e)
         

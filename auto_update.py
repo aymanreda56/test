@@ -28,5 +28,6 @@ if(current_version <= latest_version):
         f.write(entry_date)
 print(type(dateutil.parser.parse(entry_date)))
 
+# asdw
 
 

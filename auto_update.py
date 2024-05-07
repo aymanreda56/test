@@ -68,26 +68,26 @@ def check_For_Updates(username, reponame, versionfile):
         
     
 
-
+    
     latest_version = dateutil.parser.parse(entry_date)
 
     if(not current_version_str):
         print('no version file, downloading the new version...')
-        return True, latest_version
+        return True, latest_version, entry_date
     
     current_version = dateutil.parser.parse(current_version_str)
 
 
     if(current_version <= latest_version):
         print('New Version Available!')
-        return True, latest_version
+        return True, latest_version, entry_date
     else:
         print('Up To Date')
-        return False, latest_version
+        return False, latest_version, entry_date
 
 
 def download_update(username, reponame, versionfile, url):
-    is_update_available, new_version = check_For_Updates(username=username, reponame=reponame, versionfile=versionfile)
+    is_update_available, new_version, new_version_str = check_For_Updates(username=username, reponame=reponame, versionfile=versionfile)
 
     if(is_update_available):
         filename = wget.download(url)
@@ -119,7 +119,7 @@ def download_update(username, reponame, versionfile, url):
 
 
         with open(file="ver.txt", mode='w')as f:
-            f.write(new_version)
+            f.write(new_version_str)
 
 
     else:

@@ -109,14 +109,14 @@ def download_update(username, reponame, versionfile, url):
             return
         print('HERERERER')
         print(filename)
-        new_version_zipfile_path = os.path.join(os.path.dirname(os.path.abspath(os.__file__)), filename)
+        new_version_zipfile_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
 
         # subprocess.run('git pull')
 
 
         new_version_folder, extension = os.path.splitext(new_version_zipfile_path)
         with ZipFile(filename, 'r') as zObject: 
-            temp_dir = os.path.join(os.path.dirname(os.path.abspath(os.__file__)), 'temp')
+            temp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'temp')
             if(not os.path.exists(temp_dir)):
                 os.mkdir(temp_dir)
             zObject.extractall()

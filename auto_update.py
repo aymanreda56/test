@@ -15,7 +15,6 @@ with open(file="ver.txt", mode='r')as f:
     current_version_str = f.read()
 
 current_version = dateutil.parser.parse(current_version_str)
-print('logical no')
 
 
 latest_version = dateutil.parser.parse(entry_date)

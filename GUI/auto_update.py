@@ -36,15 +36,16 @@ url = f'http://github.com/{username}/{reponame}/archive/main.zip'
 def move_files_inside_folder_to_outside(folder_path):
     # Get a list of all files inside the folder
     files = os.listdir(folder_path)
+    parent_folder = os.path.dirname(os.path.dirname(folder_path))
     
-    # Move each file to the parent directory
-    for file_name in files:
-        # Construct the source and destination paths
-        source = os.path.join(folder_path, file_name)
-        destination = os.path.join(os.path.dirname(folder_path), file_name)
+    # # Move each file to the parent directory
+    # for file_name in files:
+    #     # Construct the source and destination paths
+    #     source = os.path.join(folder_path, file_name)
+    #     destination = os.path.join(parent_folder, file_name)
         
-        # Move the file
-        shutil.move(source, destination)
+    #     # Move the file
+    shutil.copytree(folder_path, parent_folder)
     
     try:
         shutil.rmtree(folder_path)
@@ -57,11 +58,15 @@ def move_files_inside_folder_to_outside(folder_path):
 
 def check_For_Updates(username, reponame, versionfile):
 
-    r = requests.get(f"https://api.github.com/repos/{username}/{reponame}/commits")
+    try:
+        r = requests.get(f"https://api.github.com/repos/{username}/{reponame}/commits")
 
-    entry_date = r.json()[0]['commit']['author']['date']
-    latest_version = dateutil.parser.parse(entry_date)
+        entry_date = r.json()[0]['commit']['author']['date']
+        latest_version = dateutil.parser.parse(entry_date)
 
+    except Exception as e:
+        print(e)
+        return False, None, ''
     
     if(os.path.exists(versionfile)):
         with open(file=f"{versionfile}", mode='r')as f:
@@ -81,7 +86,7 @@ def check_For_Updates(username, reponame, versionfile):
     current_version = dateutil.parser.parse(current_version_str)
 
 
-    if(current_version <= latest_version):
+    if(current_version < latest_version):
         print('New Version Available!')
         return True, latest_version, entry_date
     else:
@@ -89,11 +94,20 @@ def check_For_Updates(username, reponame, versionfile):
         return False, latest_version, entry_date
 
 
+
+
 def download_update(username, reponame, versionfile, url):
     is_update_available, new_version, new_version_str = check_For_Updates(username=username, reponame=reponame, versionfile=versionfile)
 
     if(is_update_available):
-        filename = wget.download(url)
+        print(f'downloading from {url}')
+        
+        try:
+            filename = wget.download(url)
+        except Exception as e:
+            print(e)
+            return
+        print('HERERERER')
         print(filename)
         new_version_zipfile_path = os.path.join(os.getcwd(), filename)
 
@@ -127,6 +141,7 @@ def download_update(username, reponame, versionfile, url):
 
     else:
         print('Up to date :)')
+
 
 
 

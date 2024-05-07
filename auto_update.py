@@ -39,7 +39,9 @@ def move_files_inside_folder_to_outside(folder_path):
         destination = os.path.join(os.path.dirname(folder_path), file_name)
         
         # Move the file
-        shutil.copy(source, destination)
+        shutil.move(source, destination)
+    
+    os.remove(folder_path)
 
 
 
@@ -83,6 +85,9 @@ if(current_version <= latest_version):
         new_version_folder, extension = os.path.splitext(new_version_zipfile_path)
 
         move_files_inside_folder_to_outside(new_version_folder)
+    
+    os.remove(new_version_zipfile_path)
+    os.remove(temp_dir)
 
 
 
